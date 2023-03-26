@@ -30,3 +30,7 @@ th {
 h2 {
     margin-bottom: 15px;
 }
+
+.section-delete-btn {
+    margin: 40px;
+}

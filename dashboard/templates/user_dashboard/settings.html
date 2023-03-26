@@ -6,7 +6,6 @@
 {% load static %}
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/settings.css' %}">
-
     <div class="row">
         <div class="col-sm-12">
             <h1>Settings</h1>
@@ -41,13 +40,19 @@
 
         <div class="row mt-4">
             <div class="col-sm-12">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h2>{{ section.name }}</h2>
+                <div id="section-delete" class="d-flex justify-content-between align-items-center">
+                    <h2>{{ section.name }} | {{ section.booking_priority }}</h2>
+                    <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-secondary btn-sm me-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editSectionModal{{ section.id }}"><i
+                            class="fas fa-pencil-alt"></i></button>
                     <a href="{% url 'dashboard:delete_section' section.id %}"
-                       class="btn btn-danger btn-sm me-2"
+                       class="btn btn-danger btn-sm me-2 section-delete-btn"
                        onclick="return confirm('Are you sure you want to delete the section {{ section.name }}? This action cannot be undone.');">
                         <i class="fas fa-trash-alt"></i>
                     </a>
+                    </div>
                 </div>
                 <table class="table table-bordered">
                     <thead>
@@ -73,11 +78,41 @@
                                                 class="fas fa-pencil-alt"></i></button>
                                         <a href="{% url 'dashboard:delete_table' table.id %}"
                                            class="btn btn-danger btn-sm me-2"><i class="fas fa-trash-alt"></i></a>
-                                        <button class="btn btn-primary btn-sm"><i class="fas fa-arrows-alt-v"></i>
-                                        </button>
+{#                                        <button class="btn btn-primary btn-sm"><i class="fas fa-arrows-alt-v"></i>#}
+{#                                        </button>#}
                                     </div>
                                 </td>
                             </tr>
+
+                            <!-- Edit Section Modal -->
+                            <div class="modal fade" id="editSectionModal{{ section.id }}" tabindex="-1"
+                                 aria-labelledby="editSectionModal{{ section.id }}Label" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post"
+                                                  action="{% url 'dashboard:update_section' section.id %}">
+                                                {% csrf_token %}
+                                                {{ section_form|crispy }}
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">
+                                                        Close
+                                                    </button>
+                                                    <button type="submit" class="btn btn-primary" name="save_changes">
+                                                        Save
+                                                        changes
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Edit Table Modal -->
                             <div class="modal fade" id="editTableModal{{ table.id }}" tabindex="-1"
@@ -142,6 +177,7 @@
                 </div>
             </div>
         </div>
+
 
     {% endfor %}
 {% endblock %}

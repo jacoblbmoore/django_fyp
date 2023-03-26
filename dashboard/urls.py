@@ -16,5 +16,9 @@ urlpatterns = [
     path('delete_section/<int:section_id>/', views.delete_section_or_table, name='delete_section'),
     path('delete_table/<int:table_id>/', views.delete_section_or_table, name='delete_table'),
     path('update_table/<int:table_id>/', views.update_table, name='update_table'),
+    path('update_section/<int:section_id>/', views.update_section, name='update_section'),
+    path('create_booking/', views.create_booking, name='create_booking'),
+
+
 
 ]

@@ -15,3 +15,10 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.booking_date} {self.booking_time}"
+
+    def save(self, *args, **kwargs):
+        if self.booking_size <= 8:
+            self.booking_duration = 2
+        else:
+            self.booking_duration = 3
+        super().save(*args, **kwargs)
