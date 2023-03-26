@@ -1,0 +1,24 @@
+.add-button {
+    display: inline-block;
+    background-color: red;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.add-button:hover {
+    background-color: #45a049;
+}
+
+.add-button span {
+    position: relative;
+    display: inline-block;
+    padding: 0 20px;
+    line-height: 1.5em;
+}

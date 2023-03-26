@@ -1,0 +1,56 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.container {
+    padding-top: 40px;
+}
+
+h2.text-center {
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.btn-success {
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #dddddd;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+.btn-primary {
+    margin-top: 15px;
+    margin-bottom: 30px;
+}
+
+.modal .modal-dialog {
+    max-width: 400px;
+}
+
+.modal .modal-content {
+    border-radius: 5px;
+}

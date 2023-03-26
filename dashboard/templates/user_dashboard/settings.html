@@ -1,0 +1,147 @@
+{% extends 'user_dashboard/base.html' %}
+{% block title %}
+    Settings
+{% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/settings.css' %}">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Settings</h1>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSectionModal">Add
+                Section
+            </button>
+        </div>
+    </div>
+
+    <!-- Add Section Modal -->
+    <div class="modal fade" id="addSectionModal" tabindex="-1" aria-labelledby="addSectionModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'dashboard:create_section_and_table' %}">
+                        {% csrf_token %}
+                        {{ section_form|crispy }}
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="create_section">Create Section</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% for section in sections %}
+
+        <div class="row mt-4">
+            <div class="col-sm-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>{{ section.name }}</h2>
+                    <a href="{% url 'dashboard:delete_section' section.id %}"
+                       class="btn btn-danger btn-sm me-2"
+                       onclick="return confirm('Are you sure you want to delete the section {{ section.name }}? This action cannot be undone.');">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Table Name/Number</th>
+                        <th>Min Capacity</th>
+                        <th>Max Capacity</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <div class="table-container">
+                        {% for table in section.table_set.all %}
+                            <tr>
+                                <td>{{ table.name }}</td>
+                                <td>{{ table.min_seats }}</td>
+                                <td>{{ table.max_seats }}</td>
+                                <td>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn btn-secondary btn-sm me-2"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editTableModal{{ table.id }}"><i
+                                                class="fas fa-pencil-alt"></i></button>
+                                        <a href="{% url 'dashboard:delete_table' table.id %}"
+                                           class="btn btn-danger btn-sm me-2"><i class="fas fa-trash-alt"></i></a>
+                                        <button class="btn btn-primary btn-sm"><i class="fas fa-arrows-alt-v"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Edit Table Modal -->
+                            <div class="modal fade" id="editTableModal{{ table.id }}" tabindex="-1"
+                                 aria-labelledby="editTableModal{{ table.id }}Label" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post"
+                                                  action="{% url 'dashboard:update_table' table_id=table.id %}">
+                                                {% csrf_token %}
+                                                {{ table_form|crispy }}
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">
+                                                        Close
+                                                    </button>
+                                                    <button type="submit" class="btn btn-primary" name="save_changes">
+                                                        Save
+                                                        changes
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    </tbody>
+                </table>
+                <!-- Add Table button -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#addTableModal{{ section.id }}">Add Table
+                </button>
+            </div>
+        </div>
+        <!-- Add Table Modal -->
+        <div class="modal fade" id="addTableModal{{ section.id }}" tabindex="-1"
+             aria-labelledby="addTableModal{{ section.id }}Label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post"
+                              action="{% url 'dashboard:create_section_and_table' section_id=section.id %}">
+                            {% csrf_token %}
+                            {{ table_form|crispy }}
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" name="create_table">Create Table</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
+{% endblock %}

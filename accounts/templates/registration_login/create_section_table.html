@@ -1,0 +1,92 @@
+{% extends 'registration_login/base.html' %}
+
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Manage Sections & Tables{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/create_section_table.css' %}">
+
+<a href="{% url 'dashboard:index' %}" class="btn btn-success">Go to Dashboard</a>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <h2 class="text-center">Manage Sections & Tables</h2>
+            <!-- Add Section button -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSectionModal">Add Section</button>
+
+            <!-- Add Section Modal -->
+            <div class="modal fade" id="addSectionModal" tabindex="-1" aria-labelledby="addSectionModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addSectionModalLabel">Add Section</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ section_form|crispy }}
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" name="create_section">Create Section</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% for section in sections %}
+    <div class="row mt-4">
+        <div class="col-md-8 mx-auto">
+            <h3>{{ section.name }}</h3>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Table Name</th>
+                    <th>Min Capacity</th>
+                    <th>Max Capacity</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for table in section.table_set.all %}
+                    <tr>
+                        <td>{{ table.name }}</td>
+                        <td>{{ table.min_seats }}</td>
+                        <td>{{ table.max_seats }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <!-- Add Table button -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTableModal{{ section.id }}">Add Table</button>
+
+            <!-- Add Table Modal -->
+            <div class="modal fade" id="addTableModal{{ section.id }}" tabindex="-1" aria-labelledby="addTableModal{{ section.id }}Label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addTableModal{{ section.id }}Label">Add Table to {{ section.name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="{% url 'accounts:create_section_table' section_id=section.id %}">
+                                {% csrf_token %}
+                                {{ table_form|crispy }}
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" name="create_table">Create Table</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+    <script src="{% static 'js/create_section_table.js' %}"></script>
+{% endblock %}

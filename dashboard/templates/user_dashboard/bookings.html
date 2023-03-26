@@ -1,0 +1,26 @@
+{% extends 'user_dashboard/base.html' %}
+{% load static %}
+
+{% block title %}
+    Bookings
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/bookings.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="col-sm-6">
+            <h1>Bookings</h1>
+        </div>
+        <div class="col-sm-6" style="text-align: right; align-items: center">
+            <button class="add-button"><span>Book</span></button>
+        </div>
+    </div>
+    <script src="{% static 'js/bookings.js' %}"></script>
+    <div id="calendar"></div>
+
+
+
+{% endblock %}
